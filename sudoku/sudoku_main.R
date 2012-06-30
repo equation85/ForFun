@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 
 library(tcltk)
-source('sudoku.R')
+source('sudoku_worker.R')
 
 tclRequire('Tktable')
 
