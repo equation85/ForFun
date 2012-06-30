@@ -55,7 +55,7 @@ for(i in 1:length(number.tk)) {
 	pos.row <- (i-1) %% sq.size
 	pos.col <- (ceiling(i/edge.len)-1) %% sq.size
 	number.tk[[i]] <- tclVar(number[i])
-	entry.tk[[i]] <- tkentry(square.frame[[sq.id]],width=2,textvariable=number.tk[[i]],foreground='black',font='bold')
+	entry.tk[[i]] <- tkentry(square.frame[[sq.id]],width=2,textvariable=number.tk[[i]],foreground='black',font='bold',borderwidth=0.5)
 	tkgrid(entry.tk[[i]],row=pos.row,column=pos.col)
 }
 # Arrage frame widgets
