@@ -25,8 +25,6 @@ print.sudoku <- function(mat, sq.size=3, sq.num=3, na.char='-') {
 	cat(print.string)
 }
 
-#uncertainty <- list(row=apply(eg.mat,1,function(x) sum(is.na(x))), col=apply(eg.mat,2,function(x) sum(is.na(x))))
-
 ### Get square index of a specific postion within the sudoku matrix
 mat2sq.id <- get.square.ind <- function(pos, sq.size=3, sq.num=3) {
 	if(length(pos)==1) pos <- arrayInd(pos,.dim=c(sq.size*sq.num,sq.size*sq.num))
@@ -66,37 +64,6 @@ check.sudoku <- function(mat, sq.size=3, sq.num=3) {
 	return( all(row.check,col.check,sq.check) )
 }
 
-###
-#get.candidates.at <- function(mat, pos, sq.size=3, sq.num=3) {
-#	if(length(pos)==1) pos <- arrayInd(pos,.dim=c(sq.size*sq.num,sq.size*sq.num))
-#	if(!is.na(mat[pos[1],pos[2]])) {
-#		#warning(sprintf('mat[%d,%d] is NOT empty!',pos[1],pos[2]))
-#		return(NA)
-#	}
-#	row.numbers <- mat[pos[1],]
-#	col.numbers <- mat[,pos[2]]
-#	sq.pos <- get.square.ind(pos, sq.size)
-#	sq.numbers <- get.square.vec(mat, sq.pos, sq.size)
-#	numbers <- unique(c(row.numbers,col.numbers,sq.numbers))
-#	numbers <- numbers[!is.na(numbers)]
-#	return( setdiff(1:(sq.size^2),numbers) )
-#}
-#
-#get.candidates.all <- function(mat, sq.size=3, sq.num=3) {
-#	candidates <- list()
-#	candidates$order <- which(is.na(mat))
-#	tmp <- arrayInd(candidates$order,.dim=c(sq.size*sq.num,sq.size*sq.num))
-#	candidates$row <- tmp[,1]
-#	candidates$col <- tmp[,2]
-#	candidates$number <- lapply(candidates$order, function(x,mat,sz,nm) get.candidates.at(mat,x,sz,nm), mat=mat,sz=sq.size,nm=sq.num)
-#	count.candi <- function(number) {
-#		if(is.na(number[1]) && length(number)==1) return(NA)
-#		return(length(number))
-#	}
-#	candidates$len <- sapply(candidates$number,count.candi)
-#	return(candidates)
-#}
-
 ### 
 get.candidates.at <- function(mat, pos, sq.size=3, sq.num=3) {
 	if(length(pos)==1) pos <- arrayInd(pos,.dim=c(sq.size*sq.num,sq.size*sq.num))
@@ -133,33 +100,12 @@ check.rule2 <- function(number, by) {
 	tapply(number,by,function(x) any(table(unlist(x))==1) )
 }
 
-## Initialize
-#sudoku <- list()
-#sudoku$mat <- eg.mat
-#sudoku$square.size <- SQUARE.SIZE
-#sudoku$square.num <- SQUARE.NUM
-#sudoku$solution <- which(is.na(sudoku$mat),arr.ind=TRUE)
-#sudoku$solution <- cbind(sudoku$solution,matrix(NA,nrow=nrow(sudoku$solution),ncol=2,dimnames=list(NULL,c('order','number'))))
-
-#solved.empty.cell <- sudoku$solution[,c('row','col')]   # Keep track with unsolved empty cells
-#solved.empty.cell
-#solved.mat <- sudoku$mat   # Track solved matrix
-#solved.candidates <- apply(solved.empty.cell,1,function(x) get.candidates(solved.mat,x,sq.size=sudoku$square.size) )   # Track possible candidates
-#
-#try.mat <- solved.mat   # Update during each try
-#try.empty.cell <- solved.empty.cell
-#try.candidates <- solved.candidates
-
 ### Rule 1: Only one candidate
 ### Rule 2: Only appear once 
 ### Rule 3: try
 ### candidates $order $number $row $col $len $square
 solve.sudoku.recursive <- function(mat, sq.size=3, sq.num=3) {
 	require(reshape2)
-#-----------------
-#mat <- eg.mat
-#sq.size <- sq.num <- 3
-#-----------------
 	repeat {
 		candidates <- get.candidates.all(mat,sq.size,sq.num)
 		if(length(candidates$len)==0) return(mat)
