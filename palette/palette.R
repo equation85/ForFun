@@ -1,3 +1,4 @@
+#!/usr/bin/env Rscript
 # Encoding: utf8
 # Palette
 
